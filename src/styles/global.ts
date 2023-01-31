@@ -18,6 +18,7 @@ export const GlobalStyle = createGlobalStyle`
         'gray-900'
       ]}; //não da pra usar a dot notation: theme.gray-900 porque tem o -, por isso tem que colocar []
     color: ${(props) => props.theme['gray-300']};
+    -webkit-font-smoothing: antialiased;
   }
 
   body, input, textarea, button {
