@@ -1,5 +1,7 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Play } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
+import * as zod from 'zod'
 
 import {
   CountdownContainer,
@@ -11,11 +13,31 @@ import {
   TaskInput,
 } from './styles'
 
+const newCycleFormValidationSchema = zod.object({
+  task: zod.string().min(1, 'Inform the task'),
+  minutesAmount: zod.number().min(5).max(60),
+})
+
+// interface NewCycleFormData {
+//   task: string
+//   minutesAmount: number
+// }  usar interface quando vai definir o objeto de validação e type quando vai criar uma tipagem a partir de outra referencia
+
+type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
+// inferir é definido automaticamente, automatizando o processo de falar qual a tipagem de algo
+
 export function Home() {
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
+    resolver: zodResolver(newCycleFormValidationSchema),
+    defaultValues: {
+      task: '',
+      minutesAmount: 0,
+    },
+  })
 
   function handleCreateNewCycle(data: any) {
     console.log(data)
+    reset() // retorna pros valores colocados no defaultValues
   }
 
   const task = watch('task')
